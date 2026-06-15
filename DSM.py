@@ -32,8 +32,6 @@ gc  -> flare threshold
 '''
 
 import numpy as np
-import scipy as sp
-
 
 def ode(t, y, a, b, c, k, pi, eps, m, gc, n, A, T): 
     x = y[0]
