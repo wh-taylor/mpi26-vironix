@@ -12,13 +12,30 @@ d(t): Long term chronic degredation
 A(t): Adverse load from observed data (fit from data)
     A(t) = w_1 * BP_d(t) + w_2 * HR_d(t) + w_3 * BM_d(t) + 
          + w_4 * W_d(t) + w_5 * C
+
+T(t): Treatment/adherence
+    T(t) \in {0, 1}
+    where 0 -> poor adherence
+          1 -> effective treatment / strong adherence
+
+Model Paramters:
+a   -> effect of adverse load on disease activity
+b   -> natural recovery rate
+c   -> treatment effect on active disease
+k   -> symptom production rate from disease burden
+r   -> symptom recovery rate
+m   -> flare effect on long-term degredation
+n   -> treatment effect on long term degredation
+eps -> slow progression rate
+gc  -> flare threshold
+
 '''
 
 import numpy as np
 import scipy as sp
 
 
-def model(t, y, a, b, c, k, pi, eps, m, gc, n, A, T): 
+def ode(t, y, a, b, c, k, pi, eps, m, gc, n, A, T): 
     x = y[0]
     g = y[1]
     d = y[2]
