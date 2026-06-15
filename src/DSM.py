@@ -1,5 +1,7 @@
-# Model of Disease state from Sagar
 '''
+Model of Disease state from Sagar
+---
+
 x(t): Hidden disease state
     x' = a*A(t)(1-x) - (b + c*T(t))*x
 
@@ -48,3 +50,16 @@ def ode(t, y, a, b, c, k, pi, eps, m, gc, n, A, T):
     z[2] = dd
 
     return z
+
+'''
+Helper Functions
+
+
+
+'''
+
+
+'''
+Output Functions
+
+'''
