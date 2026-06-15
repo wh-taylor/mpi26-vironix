@@ -4,8 +4,6 @@
 
 ### Definitions
 
-#### Functions
-
 Notation | Description
 --|--
 $x(t)$ | hidden disease activity state
@@ -20,6 +18,7 @@ $\mathrm{HR}_d(t)$ | heartrate
 $\mathrm{BM}_d(t)$ | bowel movements
 $\mathrm{W}_d(t)$ | weight
 $T(t)$ | adherance to treatment
+$T_{GI}(t)$ | PROMIS-GI T-score
 
 Notation | Description
 --|--
@@ -33,6 +32,8 @@ $n$ | treatment effect on long-term degradation
 $\epsilon$ | slow progression rate
 $g_c$ | flare threshold
 
+### Model
+
 For now, we will define $A$ by
 $$
     A(t) = w_1 \cdot \mathrm{BP}_d(t) + w_2 \cdot \mathrm{HR}_d(t) + w_3 \cdot \mathrm{BM}_d(t) + w_4 \cdot \mathrm{W}_d(t) + w_5 \cdot C.
@@ -44,6 +45,32 @@ $$
     \begin{align*}
         x' &= a A(t) (1 - x) - (b + c T(t)) x, \\
         g' &= k x (1 - g) - r g, \\
-        d' &= \epsilon \left[ m(g - g_c) (1 - d) - n T(t) d \right].
+        d' &= \epsilon \left[ m(g - g_c)_+ (1 - d) - n T(t) d \right]
     \end{align*}
 $$
+
+(where $(g - g_c)_+ = \max\{0, g - g_c\}$). The aim of the model is to predict future PROMIS-GI T-scores:
+
+$$g_{\text{obs}}(t) = \min \left\{ 1, \max \left\{ 0, \frac{T_{GI}(t) - 50}{50} \right\} \right\} \approx g(t).$$
+
+Flare indication:
+
+$$
+    F_{\text{ind}}(t) = \begin{cases}
+        1, & g(t) \ge g_c \\
+        0, & g(t) < g_c.
+    \end{cases}
+$$
+
+Flare frequency (within the time interval $[t, t + \tau]$):
+
+$$
+    \mathcal{F}(t, \tau) = \frac{1}{\tau} \int_t^{t+\tau} F_{\text{ind}}(s) ds
+$$
+
+Disease sensitivity:
+
+$$
+    s(t) = 100 \left[ w_x x(t) + w_g g(t) + w_d d(t) \right],
+$$
+where $w_x + w_g + w_d = 1$.
